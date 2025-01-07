@@ -44,6 +44,10 @@ jobs:
           include-matrix: false
       - name: "Symlink NoExperimental_whitelist.jl"
         run: ln -s NoExperimental_whitelist_.jl experimental/NoExperimental_whitelist.jl
+      - name: "HACK: Use modified Hecke"
+        run: julia --project=. -e 'using Pkg; Pkg.add([
+                PackageSpec(url="https://github.com/lgoettgens/Hecke.jl", rev="lg/bump-GAP"),
+              ])'
       - name: "Set test subgroup"
         if: ${{ matrix.group }} != ''
         run: echo "OSCAR_TEST_SUBSET=${{matrix.group}}" >> $GITHUB_ENV
@@ -68,12 +72,19 @@ jobs:
           include-matrix: false
       - name: "Symlink NoExperimental_whitelist.jl"
         run: ln -s NoExperimental_whitelist_.jl experimental/NoExperimental_whitelist.jl
+      - name: "HACK: Use modified Hecke"
+        run: julia --project=. -e 'using Pkg; Pkg.add([
+                PackageSpec(url="https://github.com/lgoettgens/Hecke.jl", rev="lg/bump-GAP"),
+              ])'
       - name: "Build package"
         uses: julia-actions/julia-buildpkg@v1
       - name: "Setup package"
         run: |
           julia --project=docs --color=yes -e '
             using Pkg
+            Pkg.add([
+              PackageSpec(url="https://github.com/lgoettgens/Hecke.jl", rev="lg/bump-GAP"),
+            ])
             Pkg.develop(PackageSpec(path=pwd()))
             Pkg.instantiate()'
       - name: "Run doctests"
@@ -95,6 +106,10 @@ jobs:
           version: '1.10'
       - name: "Symlink NoExperimental_whitelist.jl"
         run: ln -s NoExperimental_whitelist_.jl experimental/NoExperimental_whitelist.jl
+      - name: "HACK: Use modified Hecke"
+        run: julia --project=. -e 'using Pkg; Pkg.add([
+                PackageSpec(url="https://github.com/lgoettgens/Hecke.jl", rev="lg/bump-GAP"),
+              ])'
       - name: Build package
         uses: julia-actions/julia-buildpkg@v1
       - name: Install dependencies
